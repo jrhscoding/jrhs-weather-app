@@ -4,31 +4,26 @@ var form = document.querySelector("#form-control");
 var searchCity = document.querySelector("#search-city");
 var apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=" + apiKey + "&units=imperial";
 var uvUrl = "http://api.openweathermap.org/data/2.5/air_pollution?lat=35&lon=139&appid=" + apiKey + "&units=imperial";
+// let searchInput = "";
+// var geocoding = "http://api.openweathermap.org/geo/1.0/direct?q=" + searchInput + "&limit=5&appid=" + apiKey;
 
 var formSubmit = function(event) {
     event.preventDefault();
 
-    var geoUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + searchInput + "&appid=" + apiKey + "&units=imperial";
+    searchInput = searchCity.value.trim();
+    console.log(searchInput);
 
-    var getGeoUrl = function () {
-        fetch(geoUrl).then(function(response) {
-            if (response.ok) {
-                response.json().then(function(data) {
-                    console.log(data);
-                })
-            }
-        })
-    }
+    var geocoding = "http://api.openweathermap.org/geo/1.0/direct?q=" + searchInput + "&limit=5&appid=" + apiKey;
 
-    getGeoUrl();
-
-    var searchInput = searchCity.value.trim();
-    if (searchInput) {
-        // execute function to change city name to coordinates
-
-        
-    }
-
+    fetch(geocoding).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                var lat = data[0].lat;
+                var lon = data[0].lon;
+            })
+        }
+    })
+    
 }
 
 var getUrlData = function() {
