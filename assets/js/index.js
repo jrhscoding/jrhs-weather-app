@@ -6,6 +6,7 @@ var globalLat = ""
 var globalLon = ""
 var apiUrl = "";
 var uvUrl = "";
+var forecastUrl = "";
 
 var getCord = function (searchParam) {
     // utilizing this function to use the eventual "searchInput" to get coordinates based off of search
@@ -42,9 +43,24 @@ var formSubmit = function (event) {
         apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
         displayCurrentWeather();
         uvUrl = "http://api.openweathermap.org/data/2.5/air_pollution?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
+        forecastUrl = "http://api.openweathermap.org/data/2.5/forecast?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
+        displayForecast();
     });
 
 }
+
+var displayForecast = function () {
+    fetch(forecastUrl).then(function(response) {
+        if(response.ok) {
+            response.json().then(function(data) {
+                console.log(data);
+                for (var i = 0; i < data.list.length; i + 5) {
+
+                }
+            });
+        }
+    });
+};
 
 var displayCurrentWeather = function () {
 
@@ -92,7 +108,6 @@ var displayCurrentWeather = function () {
                 fetch(uvUrl).then(function (response) {
                     if (response.ok) {
                         response.json().then(function (data) {
-                            console.log(data.list[0].main.aqi);
 
                             var currentUV = document.createElement("p");
                             currentUV.textContent = "Current UV: " + data.list[0].main.aqi;
