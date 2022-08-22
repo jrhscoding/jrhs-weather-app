@@ -1,4 +1,4 @@
-var apiKey = "";
+var apiKey = "758d6634aa9f49adb412c47ed584b5ac";
 var currentCityContainer = document.querySelector("#current-city")
 var form = document.querySelector("#form-control");
 var searchCity = document.querySelector("#search-city");
@@ -28,6 +28,9 @@ var formSubmit = function (event) {
                             response.json().then(function (data) {
                                 console.log(data);
 
+                                var currentCity = document.createElement("div")
+                                currentCity.setAttribute("id", "current-city-selector")
+                                currentCityContainer.appendChild(currentCity);
                         
                                 // date conversion source https://www.coderrocketfuel.com/article/convert-a-unix-timestamp-to-a-date-in-vanilla-javascript
                                 var unix = data.dt * 1000;
@@ -38,27 +41,27 @@ var formSubmit = function (event) {
                                 var cityName = document.createElement("h3");
                                 cityName.classList = "fw-bolder"
                                 cityName.textContent = data.name + " " + humanDate;
-                                currentCityContainer.appendChild(cityName);
+                                currentCity.appendChild(cityName);
 
                                 var iconCode = data.weather[0].icon;
                                 var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
                                 var displayIcon = document.createElement("img");
                                 displayIcon.setAttribute("src", iconUrl);
-                                currentCityContainer.appendChild(displayIcon);
+                                currentCity.appendChild(displayIcon);
 
 
 
                                 var currentTemp = document.createElement("p");
                                 currentTemp.textContent = "Current Temp: " + data.main.temp;
-                                currentCityContainer.appendChild(currentTemp);
+                                currentCity.appendChild(currentTemp);
 
                                 var currentHumid = document.createElement("p");
                                 currentHumid.textContent = "Current Humidity: " + data.main.humidity;
-                                currentCityContainer.appendChild(currentHumid);
+                                currentCity.appendChild(currentHumid);
 
                                 var currentWS = document.createElement("p");
                                 currentWS.textContent = "Current Wind Speed: " + data.wind.speed + " MPH";
-                                currentCityContainer.appendChild(currentWS);
+                                currentCity.appendChild(currentWS);
 
                                 var uvUrl = "http://api.openweathermap.org/data/2.5/air_pollution?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=imperial";
 
@@ -70,7 +73,7 @@ var formSubmit = function (event) {
                 
                                                 var currentUV = document.createElement("p");
                                                 currentUV.textContent = "Current UV: " + data.list[0].main.aqi;
-                                                currentCityContainer.appendChild(currentUV);
+                                                currentCity.appendChild(currentUV);
                                             })
                                         }
                                     })
@@ -85,6 +88,7 @@ var formSubmit = function (event) {
 
                 getUrlData();
 
+                currentCityContainer.remove(currentCity);
             })
         }
     })
