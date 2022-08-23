@@ -1,6 +1,7 @@
-var apiKey = "758d6634aa9f49adb412c47ed584b5ac";
+var apiKey = "6d2d489f3e64f0d79673620f7c2f524a";
 var currentCityContainer = document.querySelector("#current-city")
 var form = document.querySelector("#form-control");
+var fiveDay = document.querySelector("#five-day");
 var searchCity = document.querySelector("#search-city");
 var globalLat = ""
 var globalLon = ""
@@ -37,7 +38,6 @@ var formSubmit = function (event) {
     event.preventDefault();
     searchInput = searchCity.value.trim();
     getCord(searchInput).then(function (data) {
-        console.log(data.lattitude);
         globalLat = data.lattitude;
         globalLon = data.longitude;
         apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
@@ -45,22 +45,60 @@ var formSubmit = function (event) {
         uvUrl = "http://api.openweathermap.org/data/2.5/air_pollution?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
         forecastUrl = "http://api.openweathermap.org/data/2.5/forecast?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
         displayForecast();
+        searchCity.value = "";
     });
 
 }
 
 var displayForecast = function () {
-    fetch(forecastUrl).then(function(response) {
-        if(response.ok) {
-            response.json().then(function(data) {
+    fetch(forecastUrl).then(function (response) {
+        if (response.ok) {
+            response.json().then(function (data) {
                 console.log(data);
-                for (var i = 0; i < data.list.length; i + 5) {
+                for (var i = 0; i < data.list.length; i = i + 8) {
+                    console.log(data.list[i].main.temp);
+
+                    var forecastCard = document.createElement("div");
+                    forecastCard.classList = ("card col")
+
+                    var unix = data.list[i].dt * 1000;
+                    var currentDate = new Date(unix);
+                    var humanDate = currentDate.toLocaleDateString();
+
+                    var iconCode = data.list[i].weather[0].icon;
+                    var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
+                    var displayIcon = document.createElement("img");
+                    displayIcon.setAttribute("src", iconUrl);
+                    forecastCard.appendChild(displayIcon);
+
+                    var humanDateForecast = document.createElement("h5");
+                    humanDateForecast.classList = ("fw-bolder");
+                    humanDateForecast.textContent = humanDate;
+                    forecastCard.appendChild(humanDateForecast);
+                    
+                    var forecastTemp = document.createElement("p");
+                    forecastTemp.textContent = "Temp: " + data.list[i].main.temp;
+
+                    var forecastHumid = document.createElement("p");
+                    forecastHumid.textContent = "Humidity: " + data.list[i].main.humidity;
+
+                    var forecastWS = document.createElement("p");
+                    forecastWS.textContent = "Wind Speed: " + data.list[i].wind.speed;
+
+                    forecastCard.appendChild(forecastTemp);
+                    forecastCard.appendChild(forecastHumid);
+                    forecastCard.appendChild(forecastWS);
+
+                    fiveDay.appendChild(forecastCard);
 
                 }
-            });
+            })
+
         }
     });
 };
+
+
 
 var displayCurrentWeather = function () {
 
