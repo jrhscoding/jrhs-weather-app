@@ -270,13 +270,17 @@ var displayCurrentWeatherHistory = function () {
 };
 
 var retrieveLocalStorage = function () {
-    for (let i = 0; i < storedHist.length; i++) {
-        var historyButton = document.createElement("button");
-        historyButton.classList = ("btn");
-        historyButton.textContent = storedHist[i];
-        localHist.push(storedHist[i]);
-        historyButton.setAttribute("id", "last-city-button");
-        searchHistory.appendChild(historyButton);
+    if (storedHist) {
+        for (let i = 0; i < storedHist.length; i++) {
+            var historyButton = document.createElement("button");
+            historyButton.classList = ("btn");
+            historyButton.textContent = storedHist[i];
+            localHist.push(storedHist[i]);
+            historyButton.setAttribute("id", "last-city-button");
+            searchHistory.appendChild(historyButton);
+        }
+    } else {
+        return;
     }
 };
 
