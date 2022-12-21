@@ -3,8 +3,8 @@ var currentCityContainer = document.querySelector("#current-city")
 var form = document.querySelector("#form-control");
 var fiveDay = document.querySelector("#five-day");
 var searchCity = document.querySelector("#search-city");
-var globalLat = ""
-var globalLon = ""
+let globalLat = ""
+let globalLon = ""
 var apiUrl = "";
 var uvUrl = "";
 var forecastUrl = "";
@@ -61,7 +61,7 @@ var formSubmit = function (event) {
         displayForecast();
         localHist.push(searchInput);
         console.log(localHist);
-        indow.localStorage.setItem("history", JSON.stringify(localHist));
+        window.localStorage.setItem("history", JSON.stringify(localHist));
         searchCity.value = "";
         console.log(JSON.parse(window.localStorage.getItem("history")));
     });
@@ -73,9 +73,10 @@ var searchHistoryFun = function (event) {
     var historyButton = document.querySelector("#last-city-button");
     searchInput = historyButton.textContent;
 
-    getCord(searchInput).then(function (data) {
-        globalLat = data.lattitude;
-        globalLon = data.longitude;
+    getCord(searchInput).then(function(data) {
+        console.log(data);
+        let globalLat = data.lattitude;
+        let globalLon = data.longitude;
         // localHist.push(globalLat , globalLon);
         console.log(localHist);
 
