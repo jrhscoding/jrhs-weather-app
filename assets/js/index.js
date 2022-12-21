@@ -11,6 +11,7 @@ var forecastUrl = "";
 var searchHistory = document.querySelector("#search-history");
 if (!localHist) var localHist = [];
 let storedHist = JSON.parse(localStorage.getItem('history'));
+console.log(storedHist);
 
 
 var getCord = function (searchParam) {
