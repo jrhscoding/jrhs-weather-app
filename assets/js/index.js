@@ -47,8 +47,8 @@ var formSubmit = function (event) {
         globalLon = data.longitude;
 
         // pushing lattitude and longitutde to the localHistarray
-        localHist.push(globalLat , globalLon);
-        console.log(localHist);
+        // localHist.push(globalLat , globalLon);
+        // console.log(localHist);
         // setting items to local storage
         window.localStorage.setItem("history", JSON.stringify(localHist));
         // fetching api information
@@ -57,6 +57,8 @@ var formSubmit = function (event) {
         uvUrl = "https://api.openweathermap.org/data/2.5/air_pollution?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
         forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
         displayForecast();
+        localHist.push(searchInput);
+        console.log(localHist);
         searchCity.value = "";
         console.log(JSON.parse(window.localStorage.getItem("history")));
     });
@@ -67,10 +69,11 @@ var searchHistoryFun = function (event) {
     event.preventDefault();
     var historyButton = document.querySelector("#last-city-button");
     searchInput = historyButton.textContent;
+    
     getCord(searchInput).then(function (data) {
         globalLat = data.lattitude;
         globalLon = data.longitude;
-        localHist.push(globalLat , globalLon);
+        // localHist.push(globalLat , globalLon);
         console.log(localHist);
 
         window.localStorage.setItem("history", JSON.stringify(localHist));
