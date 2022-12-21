@@ -9,7 +9,7 @@ var apiUrl = "";
 var uvUrl = "";
 var forecastUrl = "";
 var searchHistory = document.querySelector("#search-history");
-let localHist = [];
+if (!localHist) var localHist = [];
 let storedHist = JSON.parse(localStorage.getItem('history'));
 
 var getCord = function (searchParam) {
@@ -41,7 +41,7 @@ var formSubmit = function (event) {
     event.preventDefault();
     searchInput = searchCity.value.trim();
     getCord(searchInput).then(function (data) {
- 
+
         // assigning lattitude and longitutde
         globalLat = data.lattitude;
         globalLon = data.longitude;
@@ -59,6 +59,7 @@ var formSubmit = function (event) {
         displayForecast();
         localHist.push(searchInput);
         console.log(localHist);
+        indow.localStorage.setItem("history", JSON.stringify(localHist));
         searchCity.value = "";
         console.log(JSON.parse(window.localStorage.getItem("history")));
     });
@@ -69,20 +70,20 @@ var searchHistoryFun = function (event) {
     event.preventDefault();
     var historyButton = document.querySelector("#last-city-button");
     searchInput = historyButton.textContent;
-    
+
     getCord(searchInput).then(function (data) {
         globalLat = data.lattitude;
         globalLon = data.longitude;
         // localHist.push(globalLat , globalLon);
         console.log(localHist);
 
-        window.localStorage.setItem("history", JSON.stringify(localHist));
+        // window.localStorage.setItem("history", JSON.stringify(localHist));
         apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
         displayCurrentWeatherHistory();
         uvUrl = "https://api.openweathermap.org/data/2.5/air_pollution?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
         forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + globalLat + "&lon=" + globalLon + "&appid=" + apiKey + "&units=imperial";
         displayForecast();
-        
+
     });
 
 }
@@ -120,7 +121,7 @@ var displayForecast = function () {
                     humanDateForecast.classList = ("");
                     humanDateForecast.textContent = humanDate;
                     forecastCard.appendChild(humanDateForecast);
-                    
+
                     var forecastTemp = document.createElement("p");
                     forecastTemp.textContent = "Temp: " + data.list[i].main.temp;
 
@@ -267,8 +268,22 @@ var displayCurrentWeatherHistory = function () {
     })
 };
 
+var retrieveLocalStorage = function () {
+    for (let i = 0; i < storedHist.length; i++) {
+        var historyButton = document.createElement("button");
+        historyButton.classList = ("btn");
+        historyButton.textContent = storedHist[i];
+        historyButton.setAttribute("id", "last-city-button");
+        searchHistory.appendChild(historyButton);
+    }
+};
+
+retrieveLocalStorage();
+
 form.addEventListener('submit', formSubmit);
 searchHistory.addEventListener('click', searchHistoryFun);
+
+console.log(storedHist);
 
 
 
