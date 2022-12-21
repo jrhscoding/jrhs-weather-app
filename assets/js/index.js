@@ -12,6 +12,7 @@ var searchHistory = document.querySelector("#search-history");
 if (!localHist) var localHist = [];
 let storedHist = JSON.parse(localStorage.getItem('history'));
 
+
 var getCord = function (searchParam) {
     // utilizing this function to use the eventual "searchInput" to get coordinates based off of search
     var geocoding = "https://api.openweathermap.org/geo/1.0/direct?q=" + searchParam + "&limit=5&appid=" + apiKey;
@@ -273,6 +274,7 @@ var retrieveLocalStorage = function () {
         var historyButton = document.createElement("button");
         historyButton.classList = ("btn");
         historyButton.textContent = storedHist[i];
+        localHist.push(storedHist[i]);
         historyButton.setAttribute("id", "last-city-button");
         searchHistory.appendChild(historyButton);
     }
